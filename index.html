@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hello</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Figtree:wght@400;600&display=swap">
+<style>
+:root{--bg:#efe8f7;--ink:#3c2049;--plum:#3b1f4a;--rose:#c81fc2;--soft:#6b5479;--onrose:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1026;--ink:#f3eafa;--plum:#e9d6f7;--rose:#ff7a9e;--soft:#b9a3c8;--onrose:#1d1026}}
+:root[data-theme="dark"]{--bg:#1d1026;--ink:#f3eafa;--plum:#e9d6f7;--rose:#ff7a9e;--soft:#b9a3c8;--onrose:#1d1026}
+*,*:before,*:after{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Figtree,system-ui,sans-serif;line-height:1.6}
+h1,h2{font-family:"DM Serif Display",Georgia,serif;font-weight:400;color:var(--plum);margin:0}
+#intro{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;overflow:hidden;
+transition:opacity .8s ease,transform .8s ease,max-height .9s ease .3s;max-height:2000px}
+#intro.gone{opacity:0;transform:scale(.6);max-height:0;min-height:0;padding:0;pointer-events:none}
+h1{font-size:clamp(3rem,14vw,6rem);line-height:1.05;margin-bottom:10px}
+.ask{color:var(--soft);font-size:1.15rem;margin:0 0 32px}
+.btns{display:flex;flex-direction:column;align-items:center;gap:16px;width:100%}
+button{font:inherit;border:0;cursor:pointer;border-radius:999px;transition:all .25s ease;max-width:100%}
+button:focus-visible{outline:3px solid var(--plum);outline-offset:3px}
+#yes{background:var(--rose);color:var(--onrose);font-weight:600;font-size:1.1rem;padding:.8em 1.8em}
+#no{background:transparent;color:var(--soft);border:2px solid var(--soft);font-size:1rem;padding:.6em 1.4em}
+#letter{display:none;max-width:640px;margin:0 auto;padding:64px 22px 80px;opacity:0;transition:opacity 1.2s ease}
+#letter.show{display:block}
+#letter.in{opacity:1}
+#letter h2{font-size:2.4rem;margin-bottom:24px}
+#letter p{margin:0 0 16px;font-size:1.1rem}
+.sign{font-family:"DM Serif Display",Georgia,serif;font-size:1.6rem;color:var(--plum);margin-top:28px!important}
+@media (prefers-reduced-motion:reduce){#intro,#letter,button{transition:none}}
+</style>
+</head>
+<body>
+<section id="intro">
+<h1>Hello, <span id="name">Name</span></h1>
+<p class="ask" id="ask">Open mo pow.</p>
+<div class="btns">
+<button id="yes">open</button>
+<button id="no">No</button>
+</div>
+</section>
+
+<article id="letter" aria-live="polite">
+<h2 id="lh"></h2>
+<div id="lbody"></div>
+<p class="sign" id="lsign"></p>
+</article>
+
+<script>
+var NAME = "Alezandra";
+var ME = "gaviwavy";                
+var LETTER_PARAGRAPHS = [
+"I know this is pretty sudden, but I just want to say that I understand how overwhelming and exhausting things have been for you lately, sabi ko nga dati, i am not great with words pero sana naiintindihan mo kung saan ako nanggagaling",
+"Even with everything on your plate, I really hope life treats you gently this time around and you get to rest properly, kasi deserve nating lahat 'yon, lalo na ikaw",
+"please don't forget to take a breath and rest. I don't want to be an added pressure, I really care about you, and I'm always here for you whenever you need someone to lean on. What we have means a lot to me"
+];
+var yes=document.getElementById("yes"), no=document.getElementById("no");
+document.getElementById("name").textContent=NAME;
+document.getElementById("lh").textContent="Dear "+NAME+",";
+document.getElementById("lsign").textContent="2k26, "+ME;
+var lb=document.getElementById("lbody");
+LETTER_PARAGRAPHS.forEach(function(t){var p=document.createElement("p");p.textContent=t;lb.appendChild(p)});
+
+var clicks=0;
+no.addEventListener("click",function(){
+  clicks++;
+  var yesSize=1.1+clicks*0.55;              // rem
+  yes.style.fontSize=yesSize+"rem";
+  yes.style.padding=(0.8+clicks*0.12)+"em "+(1.8+clicks*0.35)+"em";
+  var noScale=Math.pow(0.78,clicks);
+  no.style.fontSize=(noScale)+"rem";
+  no.style.padding=(0.6*noScale)+"em "+(1.4*noScale)+"em";
+  if(clicks>=7){no.style.display="none"; document.getElementById("ask").textContent="hala ka bhie";}
+});
+
+yes.addEventListener("click",function(){
+  var intro=document.getElementById("intro"), letter=document.getElementById("letter");
+  intro.classList.add("gone");
+  setTimeout(function(){
+    letter.classList.add("show");
+    requestAnimationFrame(function(){requestAnimationFrame(function(){letter.classList.add("in")})});
+    window.scrollTo(0,0);
+  },1000);
+});
+</script>
+</body>
+</html>
